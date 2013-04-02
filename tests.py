@@ -459,11 +459,16 @@ class TestSubManager(unittest.TestCase):
         sys.argv = ["manage.py", "sub_manager"]
 
         try:
+            sys_stderr_orig = sys.stderr
+            sys.stderr = sys.stdout
             manager.run()
         except SystemExit, e:
-            assert e.code == 1
+            # too few arguments
+            assert e.code == 2
+        finally:
+            sys.stderr = sys_stderr_orig
 
-        assert "simple  simple command" in sys.stdout.getvalue()
+        assert "too few arguments" in sys.stdout.getvalue()
 
     def test_submanager_no_default_commands(self):
 
