@@ -314,7 +314,11 @@ class Manager(object):
 
         ## get the handle function and remove it from parsed options
         kwargs = app_namespace.__dict__
-        handle = kwargs.pop('func_handle')
+        if 'func_handle' in kwargs:
+            handle = kwargs.pop('func_handle')
+        else:
+            app_parser.print_help()
+            return 2
 
         ## get only safe config options
         app_config_keys = [action.dest for action in app_parser._actions
